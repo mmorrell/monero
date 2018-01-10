@@ -33,18 +33,37 @@ type Destination struct {
 	Address string `json:"address"`
 }
 
-type Transfer struct {
-	Fee    uint   `json:"fee,omitempty"`
-	TxHash string `json:"tx_hash,omitempty"`
-	TxKey  string `json:"tx_key,omitempty"`
+type TransferResponse struct {
+	In      []Transfer `json:"in,omitempty"`
+	Out     []Transfer `json:"out,omitempty"`
+	Pending []Transfer `json:"pending,omitempty"`
+	Failed  []Transfer `json:"failed,omitempty"`
+	Pool    []Transfer `json:"pool,omitempty"`
+}
 
-	Amount    uint64 `json:"amount,omitempty"`
-	Height    uint64 `json:"height,omitempty"`
-	Note      string `json:"note,omitempty"`
-	PaymentId string `json:"payment_id,omitempty"`
-	Timestamp int64  `json:"timestamp,omitempty"`
-	Txid      string `json:"txid,omitempty"`
-	Type      string `json:"type,omitempty"`
+type CreateWallet struct {
+	Filename string `json:"filename"`
+	Password string `json:"password"`
+	Language string `json:"language"`
+}
+
+type OpenWallet struct {
+	Filename string `json:"filename"`
+	Password string `json:"password"`
+}
+
+type Transfer struct {
+	Fee          uint          `json:"fee,omitempty"`
+	TxHash       string        `json:"tx_hash,omitempty"`
+	TxKey        string        `json:"tx_key,omitempty"`
+	Destinations []Destination `json:"destinations,omitempty"`
+	Amount       uint64        `json:"amount,omitempty"`
+	Height       uint64        `json:"height,omitempty"`
+	Note         string        `json:"note,omitempty"`
+	PaymentID    string        `json:"payment_id,omitempty"`
+	Timestamp    int64         `json:"timestamp,omitempty"`
+	Txid         string        `json:"txid,omitempty"`
+	Type         string        `json:"type,omitempty"`
 }
 
 type TransferSplit struct {
@@ -55,18 +74,15 @@ type TransferSplit struct {
 	TxKeyList  []string `json:"tx_key_list"`
 }
 
-// type Transfer struct {
-// 	Amount    uint   `json:"amount"`
-// 	Fee       uint   `json:"fee"`
-// 	Height    uint   `json:"height"`
-// 	Note      string `json:"note"`
-// 	PaymentId string `json:"payment_id"`
-// 	Timestamp uint   `json:"timestamp"`
-// 	Txid      string `json:"txid"`
-// 	Type      string `json:"type"`
-// }
-
-type IncomingTransfers struct {
+type IncomingTransfer struct {
+	Amount      uint64 `json:"amount,omitempty"`
+	Spent       bool   `json:"spent,omitempty"`
+	GlobalIndex uint64 `json:"global_index,omitempty"`
+	TxHash      string `json:"tx_hash,omitempty"`
+	TxSize      uint64 `json:"tx_size,omitempty"`
+}
+type IncomingTransferResponse struct {
+	Transfers []IncomingTransfer `json:"transfers"`
 }
 
 /***************************************/

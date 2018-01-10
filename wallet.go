@@ -19,6 +19,31 @@ func (c *WalletClient) GetBalance() (Balance, error) {
 	return rep, nil
 }
 
+func (c *WalletClient) CreateNewWallet(filename string, password string, language string) (bool, error) {
+	req := CreateWallet {
+		Filename: filename,
+		Password: password,
+		Language: language,
+	}
+	if err := c.Wallet("create_wallet", req, nil); err != nil {
+		return true, err
+	}
+	return true, nil
+}
+
+func (c *WalletClient) OpenWallet(filename string, password string) (bool, error){
+	req := OpenWallet {
+		Filename: filename,
+		Password: password,
+	}
+
+	if err := c.Wallet("open_wallet", req, nil); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 func (c *WalletClient) GetAddress() (Address, error) {
 	var rep Address
 	if err := c.Wallet("getaddress", nil, &rep); err != nil {
@@ -49,8 +74,8 @@ func (c *WalletClient) TransferSplit(req TransferInput) (Transfer, error) {
 	return rep, nil
 }
 
-func (c *WalletClient) GetTransfers(req GetTransferInput) (Transfer, error) {
-	var rep Transfer
+func (c *WalletClient) GetTransfers(req GetTransferInput) (TransferResponse, error) {
+	var rep TransferResponse
 	if err := c.Wallet("get_transfers", req, &rep); err != nil {
 		return rep, err
 	}
@@ -70,13 +95,13 @@ func (c *WalletClient) GetTransferByTxId(txid string) (Transfer, error) {
 	}
 	return rep.Trade, nil
 }
-func (c *WalletClient) IncomingTransfers(transferType string) (Transfer, error) {
+func (c *WalletClient) IncomingTransfers(transferType string) (IncomingTransferResponse, error) {
 	req := struct {
 		TransferType string `json:"transfer_type"`
 	}{
 		transferType,
 	}
-	var rep Transfer
+	var rep IncomingTransferResponse
 	if err := c.Wallet("incoming_transfers", req, &rep); err != nil {
 		return rep, err
 	}
